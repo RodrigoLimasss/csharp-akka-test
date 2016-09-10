@@ -1,5 +1,7 @@
 ﻿using System;
 using Akka.Actor;
+using csharp_akka_test.Actors;
+using csharp_akka_test.Messages;
 
 namespace csharp_akka_test
 {
@@ -11,9 +13,22 @@ namespace csharp_akka_test
         {
             _actorSystem = ActorSystem.Create("myActorSystem");
 
-            Console.WriteLine("Hello Akka: {0}", _actorSystem.Name);
+            IActorRef actorOne = _actorSystem.ActorOf(Props.Create<ActorOne>(), "ActorOne");
+            actorOne.Tell(new MessageOne("Rodrigo Lima", 27));
 
-            Console.ReadLine();
+            Console.ReadKey();
+
+            _actorSystem.RegisterOnTermination(new Action(PrintTerminate));
+            _actorSystem.Terminate();
+            _actorSystem.WhenTerminated.Start();
+            
+            Console.ReadKey();
+        }
+
+        static void PrintTerminate()
+        {
+            Console.WriteLine("\nActorSystem terminated.");
+            Console.WriteLine("\nPress some key to exit.");
         }
     }
 }
