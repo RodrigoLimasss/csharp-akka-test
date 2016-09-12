@@ -15,6 +15,10 @@ namespace csharp_akka_test
 
             IActorRef actorOne = _actorSystem.ActorOf(Props.Create<ActorOne>(), "ActorOne");
             actorOne.Tell(new MessageOne("Rodrigo Lima", 27));
+            actorOne.Tell(new MessageOne("Natacha", 31));
+
+            //Execute PostStop Method
+            actorOne.Tell(PoisonPill.Instance);
 
             Console.ReadKey();
 
